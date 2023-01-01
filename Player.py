@@ -14,8 +14,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = self.player_mask.rect.x
         self.rect.y = self.player_mask.rect.y
         self.rect.center = self.player_mask.rect.center
-        print(self.rect.center)
-        print(self.image.get_rect().center)
         #self.mask = pygame.mask.from_surface(self.image)
 
     def update(self, *args) -> None:
