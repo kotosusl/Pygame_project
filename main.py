@@ -3,10 +3,12 @@ import pygame
 size = width, height = 1000, 800
 screen = pygame.display.set_mode(size)
 all_sprites = pygame.sprite.Group()
+background_sprites = pygame.sprite.Group()
 
 from load_image import load_image
 from Player import Player
 from Mask import Mask
+from BackgroundMask import BackgroundMask
 
 
 def new_fon(fon_number):
@@ -21,9 +23,11 @@ if __name__ == '__main__':
     fon_map = new_fon(fon_number)
     pygame.display.set_caption('Anticoronavirus')
     running = True
-    player_mask = Mask(all_sprites)
+    background_mask = BackgroundMask(all_sprites, background_sprites)
+    player_mask = Mask(background_mask, all_sprites)
     player = Player(player_mask, all_sprites)
     while running:
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -32,18 +36,22 @@ if __name__ == '__main__':
             fon_number += 1
             fon_map = new_fon(fon_number)
             player_mask.x = 25
+            background_mask.change_costume(fon_number)
         if player_mask.x < 0 and fon_number % 3 != 1:
             fon_number -= 1
             fon_map = new_fon(fon_number)
             player_mask.x = width - 25
+            background_mask.change_costume(fon_number)
         if player_mask.y > height and fon_number < 7:
             fon_number += 3
             fon_map = new_fon(fon_number)
             player_mask.y = 25
+            background_mask.change_costume(fon_number)
         if player_mask.y < 0 and fon_number > 3:
             fon_number -= 3
             fon_map = new_fon(fon_number)
             player_mask.y = height - 25
+            background_mask.change_costume(fon_number)
 
         keys = pygame.key.get_pressed()
         all_sprites.update(keys)
