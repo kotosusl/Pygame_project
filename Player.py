@@ -1,6 +1,6 @@
 import pygame
-import math
 from load_image import load_image
+from befor_init import STATE_MACHINE
 
 
 class Player(pygame.sprite.Sprite):

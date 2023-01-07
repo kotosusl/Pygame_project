@@ -1,6 +1,7 @@
 import pygame
 import math
 from load_image import load_image
+from befor_init import STATE_MACHINE
 
 
 class Mask(pygame.sprite.Sprite):
@@ -10,6 +11,7 @@ class Mask(pygame.sprite.Sprite):
         super().__init__(*group)
         self.image = Mask.image
         self.bg_mask = bg_mask
+        self.healthy = 5
         self.x = 500
         self.y = 400
         self.speed = 0.4
@@ -46,13 +48,13 @@ class Mask(pygame.sprite.Sprite):
 
         elif args[pygame.K_a]:
             self.route = (self.route - self.speed) % 360
-            self.rect = self.image.get_rect(center=self.rect.center)
+            #self.rect = self.image.get_rect(center=self.rect.center)
             self.image = pygame.transform.rotate(Mask.image, 360 - self.route)
             self.mask = pygame.mask.from_surface(pygame.transform.rotate(load_image('mask2.png'), 360 - self.route))
 
         elif args[pygame.K_d]:
             self.route = (self.route + self.speed) % 360
-            self.rect = self.image.get_rect(center=self.rect.center)
+            #self.rect = self.image.get_rect(center=self.rect.center)
             self.image = pygame.transform.rotate(Mask.image, 360 - self.route)
             self.mask = pygame.mask.from_surface(pygame.transform.rotate(load_image('mask2.png'), 360 - self.route))
 
