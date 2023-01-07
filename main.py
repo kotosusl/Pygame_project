@@ -5,10 +5,12 @@ from Mask import Mask
 from BackgroundMask import BackgroundMask
 from Virus import Virus
 from befor_init import size, screen, STATE_MACHINE, virus_amount_of_enemies
+from Bullet import Bullet
 
 all_sprites = pygame.sprite.Group()
 background_sprites = pygame.sprite.Group()
 viruses_sprites = pygame.sprite.Group()
+bullets_sprites = pygame.sprite.Group()
 
 
 def new_fon(fon_number):
@@ -42,6 +44,9 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    Bullet(player_mask, bullets_sprites, all_sprites)
         if fon_number % 3 != 0:
             if player_mask.x > size[0]:
                 fon_number += 1
