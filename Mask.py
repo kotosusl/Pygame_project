@@ -5,7 +5,7 @@ from befor_init import STATE_MACHINE
 
 
 class Mask(pygame.sprite.Sprite):
-    image = load_image('mask2.png', -1)
+    image = load_image('mask2.png')
 
     def __init__(self, bg_mask, *group):
         super().__init__(*group)
@@ -14,7 +14,7 @@ class Mask(pygame.sprite.Sprite):
         self.healthy = 5
         self.x = 500
         self.y = 400
-        self.speed = 0.4
+        self.speed = 0.6
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
@@ -35,13 +35,13 @@ class Mask(pygame.sprite.Sprite):
             self.mask = pygame.mask.from_surface(pygame.transform.rotate(load_image('mask2.png'), 360 - self.route))
 
         elif args[pygame.K_s]:
-            self.x -= math.sin(math.radians(self.route)) * self.speed
-            self.y += math.cos(math.radians(self.route)) * self.speed
+            self.x -= math.sin(math.radians(self.route)) * self.speed / 2
+            self.y += math.cos(math.radians(self.route)) * self.speed / 2
             self.rect.y = self.y
             self.rect.x = self.x
             if self.iscollide():
-                self.x += math.sin(math.radians(self.route)) * self.speed
-                self.y -= math.cos(math.radians(self.route)) * self.speed
+                self.x += math.sin(math.radians(self.route)) * self.speed / 2
+                self.y -= math.cos(math.radians(self.route)) * self.speed / 2
                 self.rect.y = self.y
                 self.rect.x = self.x
             self.mask = pygame.mask.from_surface(pygame.transform.rotate(load_image('mask2.png'), 360 - self.route))

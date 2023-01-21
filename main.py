@@ -46,7 +46,7 @@ if __name__ == '__main__':
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    Bullet(player_mask, bullets_sprites, all_sprites)
+                    Bullet(player_mask, player, bullets_sprites, all_sprites)
         if fon_number % 3 != 0:
             if player_mask.x > size[0]:
                 fon_number += 1
@@ -90,6 +90,7 @@ if __name__ == '__main__':
 
 
         keys = pygame.key.get_pressed()
+        hits = pygame.sprite.groupcollide(viruses_sprites, bullets_sprites, False, True)
         all_sprites.update(keys)
         screen.blit(fon_map, (0, 0))
         all_sprites.draw(screen)
