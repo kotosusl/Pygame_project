@@ -5,7 +5,7 @@ from befor_init import STATE_MACHINE
 
 
 class Mask(pygame.sprite.Sprite):
-    image = load_image('mask2.png')
+    image = load_image('mask2.png', -1)
 
     def __init__(self, bg_mask, *group):
         super().__init__(*group)
