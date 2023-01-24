@@ -5,7 +5,7 @@ import math
 
 
 class Bullet(pygame.sprite.Sprite):
-    image = load_image('bullet3.png', (0, 0, 0))
+    image = load_image('bullet2.png') #, (0, 0, 0))
 
     def __init__(self, player_mask, player,  *group):
         super(Bullet, self).__init__(*group)
