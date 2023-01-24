@@ -1,5 +1,5 @@
 import pygame
-from befor_init import STATE_MACHINE, size
+from befor_init import size
 from load_image import load_image
 import math
 

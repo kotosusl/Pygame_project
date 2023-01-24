@@ -1,11 +1,12 @@
 import pygame
+from befor_init import size, screen, virus_amount_of_enemies
 from load_image import load_image
 from Player import Player
 from Mask import Mask
 from BackgroundMask import BackgroundMask
-from Virus import Virus
-from befor_init import size, screen, STATE_MACHINE, virus_amount_of_enemies
+from Virus import Virus, VIRUS_STATE_MACHINE
 from Bullet import Bullet
+from Options import Timer, Health
 
 all_sprites = pygame.sprite.Group()
 background_sprites = pygame.sprite.Group()
@@ -28,8 +29,8 @@ def new_virus(fon_number, player_mask, bg_mask):
         Virus(fon_number, player_mask, bg_mask, viruses_sprites, all_sprites)
 
 
-
 if __name__ == '__main__':
+
     pygame.init()
     fon_number = 1
     fon_map = new_fon(fon_number)
@@ -39,6 +40,11 @@ if __name__ == '__main__':
     player_mask = Mask(background_mask, all_sprites)
     player = Player(player_mask, all_sprites)
     new_virus(fon_number, player_mask, background_mask)
+    MYEVENTTYPE = pygame.USEREVENT + 1
+    pygame.time.set_timer(MYEVENTTYPE, 1000)
+    timer = Timer(all_sprites)
+    health = Health(player_mask, all_sprites)
+
     while running:
 
         for event in pygame.event.get():
@@ -47,6 +53,12 @@ if __name__ == '__main__':
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     Bullet(player_mask, player, bullets_sprites, all_sprites)
+            if event.type == MYEVENTTYPE:
+                timer.up()
+                damage = pygame.sprite.spritecollide(player_mask, viruses_sprites, False)
+                player_mask.healthy -= len(damage)
+                health.up()
+
         if fon_number % 3 != 0:
             if player_mask.x > size[0]:
                 fon_number += 1

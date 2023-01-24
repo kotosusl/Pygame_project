@@ -1,5 +1,4 @@
 import pygame
-from befor_init import STATE_MACHINE
 from load_image import load_image
 
 

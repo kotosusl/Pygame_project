@@ -1,8 +1,10 @@
 import pygame
 import math
-from befor_init import STATE_MACHINE, virus_enemy_type, spawn_enemies_x, spawn_enemies_y, size
+from befor_init import virus_enemy_type, spawn_enemies_x, spawn_enemies_y, size
 from load_image import load_image
 from random import randint
+
+VIRUS_STATE_MACHINE = 0
 
 
 class Virus(pygame.sprite.Sprite):
@@ -37,7 +39,7 @@ class Virus(pygame.sprite.Sprite):
         self.frames1 = self.cut_sheet(Virus.images[virus_enemy_type[fon_number - 1]], 6, 1)
         self.frames2 = self.cut_sheet(Virus.images[virus_enemy_type[fon_number - 1] + 3], 4, 1)
         self.frames3 = self.cut_sheet(Virus.images[virus_enemy_type[fon_number - 1] + 6], 2, 1)
-        self.cur_frame = 0
+        self.cur_frame = randint(1, 5)
         self.image = self.frames1[self.cur_frame]
         self.mask = pygame.mask.from_surface(self.image)
         self.i = 0
@@ -57,7 +59,9 @@ class Virus(pygame.sprite.Sprite):
         self.i += 1
         distance = math.sqrt(((self.x - self.player_mask.x) ** 2) + ((self.y - self.player_mask.y) ** 2))
         if distance > 300:
+            VIRUS_STATE_MACHINE = 0
             if self.i > 100:
+
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames1)
                 self.image = self.frames1[self.cur_frame]
                 self.mask = pygame.mask.from_surface(self.image)
@@ -78,6 +82,7 @@ class Virus(pygame.sprite.Sprite):
             self.rect.x = self.x
 
         elif distance < 301 and not self.iscollide(self.player_mask):
+            VIRUS_STATE_MACHINE = 0
             if self.i > 120:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames2)
                 self.image = self.frames2[self.cur_frame]
@@ -102,10 +107,10 @@ class Virus(pygame.sprite.Sprite):
                 self.mask = pygame.mask.from_surface(self.image)
                 self.i = 0
             self.speed = 0.05
-            self.player_mask.healthy -= 1
 
     def iscollide(self, mask):
         if pygame.sprite.collide_mask(self, mask):
+            VIRUS_STATE_MACHINE = 1
             return True
         return False
 

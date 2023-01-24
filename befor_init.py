@@ -3,7 +3,6 @@ from random import randint
 
 size = width, height = 1000, 800
 screen = pygame.display.set_mode(size)
-STATE_MACHINE = 0
 virus_amount_of_enemies = [randint(1, 2) for _ in range(9)]
 virus_enemy_type = [randint(0, 2) for _ in range(9)]
 virus_amount_of_enemies[4] = 3
