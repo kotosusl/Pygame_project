@@ -45,8 +45,18 @@ class Health(pygame.sprite.Sprite):
         self.image.blit(self.text, (50, 15))
 
 
-'''class Vaccine(pygame.sprite.Sprite):
+class Vaccine(pygame.sprite.Sprite):
     image = load_image('option1_1.png', -1)
 
-    def __init__(self, *group):
-        super(Vaccine, self).__init__(*group)'''
+    def __init__(self, all_count, *group):
+        super(Vaccine, self).__init__(*group)
+        self.image = Vaccine.image.copy()
+        self.rect = self.image.get_rect()
+        self.rect.x = 5
+        self.rect.y = 5
+        self.all_count = all_count
+
+    def up(self, count_viruses):
+        self.image = Vaccine.image.copy()
+        pygame.draw.rect(self.image, pygame.Color(0, 150, 255),
+                         (38, 17, 72 // self.all_count * sum(count_viruses), 39), 0)
