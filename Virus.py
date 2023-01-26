@@ -1,6 +1,6 @@
 import pygame
 import math
-from befor_init import virus_enemy_type, spawn_enemies_x, spawn_enemies_y, size
+from befor_init import spawn_enemies_x, spawn_enemies_y, size
 from load_image import load_image
 from random import randint
 
@@ -18,7 +18,7 @@ class Virus(pygame.sprite.Sprite):
               load_image('virus_yellow_animation3.png', (0, 0, 0)),
               load_image('virus_blue_animation3.png', (0, 0, 0))]
 
-    def __init__(self, fon_number, player_mask, bg_mask, *group):
+    def __init__(self, virus_enemy_type, fon_number, player_mask, bg_mask, *group):
         super(Virus, self).__init__(*group)
         self.fon_number = fon_number
         self.player_mask = player_mask
