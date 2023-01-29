@@ -9,7 +9,15 @@ from Bullet import Bullet
 from Options import Timer, Health, Vaccine
 from random import randint
 from StartMenu import print_menu
+from EndMenu import print_end_menu
 
+# 0 - в игровом меню
+# 1 - игра начата
+# 2 - игра на паузе
+# 3 - игра выиграна
+# 4 - игра проиграна
+
+GLOBAL_STATE_MACHINE = 0
 all_sprites = pygame.sprite.Group()
 background_sprites = pygame.sprite.Group()
 viruses_sprites = pygame.sprite.Group()
@@ -52,7 +60,10 @@ if __name__ == '__main__':
 
     while True:
 
+        GLOBAL_STATE_MACHINE = 0
         volume, cut_scene = print_menu(volume, cut_scene)
+
+        GLOBAL_STATE_MACHINE = 1
         all_sprites = pygame.sprite.Group()
         background_sprites = pygame.sprite.Group()
         viruses_sprites = pygame.sprite.Group()
@@ -65,7 +76,7 @@ if __name__ == '__main__':
         fon_map = new_fon(fon_number)
         background_mask = BackgroundMask(all_sprites, background_sprites)
         player_mask = Mask(background_mask, all_sprites)
-        player = Player(player_mask, all_sprites)
+        player = Player(GLOBAL_STATE_MACHINE, player_mask, all_sprites)
         new_virus(fon_number, player_mask, background_mask)
         MYEVENTTYPE = pygame.USEREVENT + 1
         pygame.time.set_timer(MYEVENTTYPE, 1000)
@@ -80,16 +91,22 @@ if __name__ == '__main__':
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    GLOBAL_STATE_MACHINE = 6
                     if event.button == 1:
                         Bullet(player_mask, player, bullets_sprites, all_sprites)
                         sound_shooting.play()
                 if event.type == MYEVENTTYPE:
                     timer.up()
-                    damage = pygame.sprite.spritecollide(player_mask, viruses_sprites, False)
+                    if timer.count == 0:
+                        GLOBAL_STATE_MACHINE = 4
+                    damage = pygame.sprite.spritecollide(player, viruses_sprites, False)
                     if damage:
-                        player_mask.healthy -= len(damage)
+                        player_mask.healthy = (player_mask.healthy - len(damage)
+                                               if player_mask.healthy - len(damage) >= 0 else 0)
                         health.up()
                         sound_hit_player.play()
+                        if player_mask.healthy == 0:
+                            GLOBAL_STATE_MACHINE = 4
 
             if fon_number % 3 != 0:
                 if player_mask.x > size[0]:
@@ -138,4 +155,13 @@ if __name__ == '__main__':
             screen.blit(fon_map, (0, 0))
             all_sprites.draw(screen)
             pygame.display.flip()
+
+            if GLOBAL_STATE_MACHINE == 3:
+                running = False
+                end_menu = print_end_menu(1)
+            if GLOBAL_STATE_MACHINE == 4:
+                running = False
+                end_menu = print_end_menu(0)
+
+
 

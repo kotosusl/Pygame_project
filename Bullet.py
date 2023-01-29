@@ -5,14 +5,14 @@ import math
 
 
 class Bullet(pygame.sprite.Sprite):
-    image = load_image('bullet2.png') #, (0, 0, 0))
+    image = load_image('bullet3.png', (0, 0, 0))
 
     def __init__(self, player_mask, player,  *group):
         super(Bullet, self).__init__(*group)
         self.image = Bullet.image
         self.rect = player_mask.image.get_rect()
-        self.x = player_mask.rect.x
-        self.y = player_mask.rect.y
+        self.x = player_mask.rect.center[0]
+        self.y = player_mask.rect.center[1]
         self.rect.x = self.x
         self.rect.y = self.y
         self.rect.center = player_mask.rect.center
@@ -25,12 +25,11 @@ class Bullet(pygame.sprite.Sprite):
         #self.x += math.sin(math.radians((self.route + 90) % 360)) * self.speed * 20
         self.image = pygame.transform.rotate(Bullet.image, 360 - self.route)
         self.mask = pygame.mask.from_surface(self.image)
-        if 90 > self.route or self.route > 200:
-            self.x -= math.sin(math.radians(self.route)) * 40
-        else:
-            self.x += math.sin(math.radians(self.route)) * 40
-        print(self.x, self.y, self.route)
-        print(player_mask.rect.x, player_mask.rect.y)
+        print(self.route)
+        if 200 < self.route < 260:
+            self.y -= 30
+        if 20 < self.route < 70:
+            self.y -= 30
 
     def update(self, args) -> None:
         self.x += math.sin(math.radians(self.route)) * self.speed
