@@ -18,7 +18,7 @@ class ButtonInMenu(pygame.sprite.Sprite):
         self.image = ButtonInMenu.images[0]
         self.rect = self.image.get_rect()
         self.rect.x = 650
-        self.rect.y = 700
+        self.rect.y = 670
 
     def update(self, *args) -> None:
         if self.rect.collidepoint(pygame.mouse.get_pos()):

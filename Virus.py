@@ -5,6 +5,17 @@ from load_image import load_image
 from random import randint
 
 VIRUS_STATE_MACHINE = 0
+KILLS_COUNT = 0
+virus_amount_of_enemies = [randint(1, 2) for _ in range(9)]
+virus_amount_of_enemies[4] = 3
+
+
+def new_init():
+    global KILLS_COUNT, virus_amount_of_enemies
+    KILLS_COUNT = 0
+    virus_amount_of_enemies = [randint(1, 2) for _ in range(9)]
+    virus_amount_of_enemies[4] = 3
+    return virus_amount_of_enemies
 
 
 class Virus(pygame.sprite.Sprite):
@@ -18,7 +29,8 @@ class Virus(pygame.sprite.Sprite):
               load_image('virus_yellow_animation3.png', (0, 0, 0)),
               load_image('virus_blue_animation3.png', (0, 0, 0))]
 
-    def __init__(self, virus_enemy_type, fon_number, player_mask, bg_mask, *group):
+    def __init__(self, vaccine, bullets_sprites, virus_enemy_type,
+                 fon_number, player_mask, bg_mask, *group):
         super(Virus, self).__init__(*group)
         self.fon_number = fon_number
         self.player_mask = player_mask
@@ -35,6 +47,7 @@ class Virus(pygame.sprite.Sprite):
         self.route = randint(0, 359)
         self.healthy = randint(1, 3)
         self.clock = pygame.time.Clock()
+        self.bullets_sprites = bullets_sprites
 
         self.frames1 = self.cut_sheet(Virus.images[virus_enemy_type[fon_number - 1]], 6, 1)
         self.frames2 = self.cut_sheet(Virus.images[virus_enemy_type[fon_number - 1] + 3], 4, 1)
@@ -43,6 +56,7 @@ class Virus(pygame.sprite.Sprite):
         self.image = self.frames1[self.cur_frame]
         self.mask = pygame.mask.from_surface(self.image)
         self.i = 0
+        self.vaccine = vaccine
 
     def cut_sheet(self, sheet, columns, rows):
         lst = []
@@ -59,7 +73,6 @@ class Virus(pygame.sprite.Sprite):
         self.i += 1
         distance = math.sqrt(((self.x - self.player_mask.x) ** 2) + ((self.y - self.player_mask.y) ** 2))
         if distance > 300:
-            VIRUS_STATE_MACHINE = 0
             if self.i > 100:
 
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames1)
@@ -82,7 +95,6 @@ class Virus(pygame.sprite.Sprite):
             self.rect.x = self.x
 
         elif distance < 301 and not self.iscollide(self.player_mask):
-            VIRUS_STATE_MACHINE = 0
             if self.i > 120:
                 self.cur_frame = (self.cur_frame + 1) % len(self.frames2)
                 self.image = self.frames2[self.cur_frame]
@@ -108,9 +120,19 @@ class Virus(pygame.sprite.Sprite):
                 self.i = 0
             self.speed = 0.05
 
+        self.virus_hits = pygame.sprite.spritecollide(self, self.bullets_sprites, True)
+        self.healthy -= len(self.virus_hits)
+        if self.healthy <= 0:
+            global KILLS_COUNT
+            KILLS_COUNT += 1
+            pygame.mixer.Sound('sounds/Booms.wav')
+            self.vaccine.up(KILLS_COUNT)
+            virus_amount_of_enemies[self.fon_number - 1] -= 1
+            print(sum(virus_amount_of_enemies), KILLS_COUNT)
+            self.kill()
+
     def iscollide(self, mask):
         if pygame.sprite.collide_mask(self, mask):
-            VIRUS_STATE_MACHINE = 1
             return True
         return False
 

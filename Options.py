@@ -1,6 +1,7 @@
 import pygame
 from load_image import load_image
 from befor_init import size
+from Virus import KILLS_COUNT
 
 
 class Timer(pygame.sprite.Sprite):
@@ -56,7 +57,7 @@ class Vaccine(pygame.sprite.Sprite):
         self.rect.y = 5
         self.all_count = all_count
 
-    def up(self, count_viruses):
+    def up(self, kill_count):
         self.image = Vaccine.image.copy()
         pygame.draw.rect(self.image, pygame.Color(0, 150, 255),
-                         (38, 17, 72 // self.all_count * sum(count_viruses), 39), 0)
+                         (38, 17, (72 // self.all_count) * kill_count, 23), 0)
