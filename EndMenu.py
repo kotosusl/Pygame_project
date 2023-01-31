@@ -49,7 +49,6 @@ class EndMenu(pygame.sprite.Sprite):
 def print_end_menu(menu_type):
     global END_STATE_MACHINE
     END_STATE_MACHINE = 0
-
     EndMenu(menu_type, menu_sprite)
     while True:
         events = pygame.event.get()

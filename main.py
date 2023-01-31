@@ -69,8 +69,6 @@ if __name__ == '__main__':
         background_sprites = pygame.sprite.Group()
         viruses_sprites = pygame.sprite.Group()
         bullets_sprites = pygame.sprite.Group()
-        '''virus_amount_of_enemies = [randint(1, 2) for _ in range(9)]
-        virus_amount_of_enemies[4] = 3'''
 
         virus_amount_of_enemies = new_init()
         viruses_count = sum(virus_amount_of_enemies)

@@ -57,6 +57,8 @@ class Virus(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.i = 0
         self.vaccine = vaccine
+        self.sound_hit_virus = pygame.mixer.Sound('sounds/Booms.wav')
+        self.sound_hit_virus2 = pygame.mixer.Sound('sounds/Collect.wav')
 
     def cut_sheet(self, sheet, columns, rows):
         lst = []
@@ -125,11 +127,12 @@ class Virus(pygame.sprite.Sprite):
         if self.healthy <= 0:
             global KILLS_COUNT
             KILLS_COUNT += 1
-            pygame.mixer.Sound('sounds/Booms.wav')
+            self.sound_hit_virus.play()
             self.vaccine.up(KILLS_COUNT)
             virus_amount_of_enemies[self.fon_number - 1] -= 1
-            print(sum(virus_amount_of_enemies), KILLS_COUNT)
             self.kill()
+        elif self.virus_hits:
+            self.sound_hit_virus2.play()
 
     def iscollide(self, mask):
         if pygame.sprite.collide_mask(self, mask):
