@@ -19,9 +19,9 @@ class RatingWindow(pygame.sprite.Sprite):
             y = 150
             font1 = pygame.font.SysFont('sans serif', 42)
 
-            for num, row in enumerate(bests[::-1]):
+            for num, row in enumerate(bests):
                 image = RatingWindow.row.copy()
-                self.number = font1.render(str(num), False, (3, 3, 3))
+                self.number = font1.render(str(num + 1), False, (3, 3, 3))
                 self.date = font1.render(row['date'], False, (3, 3, 3))
                 self.time = font1.render(row['time'], False, (3, 3, 3))
                 self.viruses = font1.render(row['viruses'], False, (3, 3, 3))

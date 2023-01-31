@@ -2,6 +2,7 @@ import pygame
 from load_image import load_image
 from befor_init import size, screen
 from Rating import RatingWindow
+from Instruction import InstructionWindow
 from ButtonClose import ButtonClose
 
 # 0 - в ожидании ответа пользователя
@@ -146,15 +147,19 @@ def print_menu(volume, cut_scene):
     START_STATE_MACHINE = 0
     running = True
     StartMenu(menu_sprite)
-    print_rating = None
+    print_table = None
     close = None
+
     while running:
         if START_STATE_MACHINE == 5:
             running = False
         elif START_STATE_MACHINE == 1:
             return volume, cut_scene
-        elif START_STATE_MACHINE == 3 and print_rating is None:
-            print_rating = RatingWindow(windows_sprites)
+        elif START_STATE_MACHINE == 3 and print_table is None:
+            print_table = RatingWindow(windows_sprites)
+            close = ButtonClose(920, 60, close_button_sprites)
+        elif START_STATE_MACHINE == 2 and print_table is None:
+            print_table = InstructionWindow(windows_sprites)
             close = ButtonClose(920, 60, close_button_sprites)
         events = pygame.event.get()
         for event in events:
@@ -162,7 +167,7 @@ def print_menu(volume, cut_scene):
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    if START_STATE_MACHINE == 3:
+                    if START_STATE_MACHINE == 3 or START_STATE_MACHINE == 2:
                         close.state = 1
                     else:
                         running = False
@@ -170,9 +175,8 @@ def print_menu(volume, cut_scene):
         if close and close.state == 1:
             close.kill()
             close = None
-            if print_rating:
-                print_rating.kill()
-                print_rating = None
+            print_table.kill()
+            print_table = None
             START_STATE_MACHINE = 0
 
         buttons_sprites.update(*events)
