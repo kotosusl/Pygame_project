@@ -153,7 +153,6 @@ if __name__ == '__main__':
             if sum(virus_amount_of_enemies) == 0:
                 GLOBAL_STATE_MACHINE = 3
             keys = pygame.key.get_pressed()
-            #hits = pygame.sprite.groupcollide(viruses_sprites, bullets_sprites, False, True)
             all_sprites.update(keys)
             screen.blit(fon_map, (0, 0))
             all_sprites.draw(screen)

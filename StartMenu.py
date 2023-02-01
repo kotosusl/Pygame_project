@@ -4,6 +4,7 @@ from befor_init import size, screen
 from Rating import RatingWindow
 from Instruction import InstructionWindow
 from ButtonClose import ButtonClose
+from Settings import SettingsWindow, buttons_sprites_settings
 
 # 0 - в ожидании ответа пользователя
 # 1 - запуск игры
@@ -34,7 +35,8 @@ class ButtonStart(pygame.sprite.Sprite):
             self.image = ButtonStart.images[1]
             if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
                 global START_STATE_MACHINE
-                START_STATE_MACHINE = 1
+                if START_STATE_MACHINE == 0:
+                    START_STATE_MACHINE = 1
         else:
             self.image = ButtonStart.images[0]
 
@@ -55,7 +57,8 @@ class ButtonExit(pygame.sprite.Sprite):
             self.image = ButtonExit.images[1]
             if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
                 global START_STATE_MACHINE
-                START_STATE_MACHINE = 5
+                if START_STATE_MACHINE == 0:
+                    START_STATE_MACHINE = 5
         else:
             self.image = ButtonExit.images[0]
 
@@ -76,7 +79,8 @@ class ButtonInstruction(pygame.sprite.Sprite):
             self.image = ButtonInstruction.images[1]
             if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
                 global START_STATE_MACHINE
-                START_STATE_MACHINE = 2
+                if START_STATE_MACHINE == 0:
+                    START_STATE_MACHINE = 2
         else:
             self.image = ButtonInstruction.images[0]
 
@@ -97,7 +101,8 @@ class ButtonRating(pygame.sprite.Sprite):
             self.image = ButtonRating.images[1]
             if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
                 global START_STATE_MACHINE
-                START_STATE_MACHINE = 3
+                if START_STATE_MACHINE == 0:
+                    START_STATE_MACHINE = 3
         else:
             self.image = ButtonRating.images[0]
 
@@ -118,7 +123,8 @@ class ButtonSettings(pygame.sprite.Sprite):
             self.image = ButtonSettings.images[1]
             if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
                 global START_STATE_MACHINE
-                START_STATE_MACHINE = 4
+                if START_STATE_MACHINE == 0:
+                    START_STATE_MACHINE = 4
         else:
             self.image = ButtonSettings.images[0]
 
@@ -161,6 +167,9 @@ def print_menu(volume, cut_scene):
         elif START_STATE_MACHINE == 2 and print_table is None:
             print_table = InstructionWindow(windows_sprites)
             close = ButtonClose(920, 60, close_button_sprites)
+        elif START_STATE_MACHINE == 4 and print_table is None:
+            print_table = SettingsWindow(volume, cut_scene, windows_sprites)
+            close = ButtonClose(920, 60, close_button_sprites)
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
@@ -175,12 +184,18 @@ def print_menu(volume, cut_scene):
         if close and close.state == 1:
             close.kill()
             close = None
+            if START_STATE_MACHINE == 4:
+                volume = print_table.VOLUME
+                cut_scene = print_table.CUT_SCENE
+                for button in buttons_sprites_settings:
+                    button.kill()
             print_table.kill()
             print_table = None
             START_STATE_MACHINE = 0
 
         buttons_sprites.update(*events)
         menu_sprite.draw(screen)
+        windows_sprites.update(*events)
         windows_sprites.draw(screen)
         close_button_sprites.update(*events)
         close_button_sprites.draw(screen)
