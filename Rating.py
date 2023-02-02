@@ -9,7 +9,7 @@ class RatingWindow(pygame.sprite.Sprite):
 
     def __init__(self, *group):
         super().__init__(*group)
-        self.image = RatingWindow.image
+        self.image = RatingWindow.image.copy()
         self.rect = self.image.get_rect()
         self.rect.x = 10
         self.rect.y = 10

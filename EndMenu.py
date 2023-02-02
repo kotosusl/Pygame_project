@@ -1,6 +1,9 @@
 import pygame
 from load_image import load_image
 from befor_init import screen
+import datetime
+from Virus import KILLS_COUNT
+import csv
 
 # 0 - в ожидании ответа
 # 1 - выход в меню
@@ -46,9 +49,23 @@ class EndMenu(pygame.sprite.Sprite):
         buttons_sprites.draw(self.image)
 
 
-def print_end_menu(menu_type):
+def print_end_menu(menu_type, timer, healthy, kills):
     global END_STATE_MACHINE
     END_STATE_MACHINE = 0
+    with open('rating.csv', encoding='utf-8') as rating_file_read:
+        end_play = {'date': datetime.date.today().strftime('%d.%m.%Y'),
+                    'viruses': kills,
+                    'time': f'{timer // 60}:{str(timer % 60).rjust(2, "0")}',
+                    'health': healthy}
+        reader = csv.DictReader(rating_file_read, delimiter=';', quotechar='"')
+        top10 = sorted(reader, key=lambda x: int(x['viruses']), reverse=True)[:10]
+        top10.append(end_play)
+        with open('rating.csv', 'w', newline='', encoding='utf8') as rating_file_write:
+            writer = csv.DictWriter(
+                rating_file_write, fieldnames=list(top10[0].keys()),
+                delimiter=';', quoting=csv.QUOTE_NONNUMERIC)
+            writer.writeheader()
+            writer.writerows(top10)
     EndMenu(menu_type, menu_sprite)
     while True:
         events = pygame.event.get()

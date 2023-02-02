@@ -4,7 +4,7 @@ from load_image import load_image
 from Player import Player
 from Mask import Mask
 from BackgroundMask import BackgroundMask
-from Virus import Virus, virus_amount_of_enemies, new_init
+from Virus import Virus, virus_amount_of_enemies, new_init, KILLS_COUNT
 from Bullet import Bullet
 from Options import Timer, Health, Vaccine
 from random import randint
@@ -12,10 +12,11 @@ from StartMenu import print_menu
 from EndMenu import print_end_menu
 
 # 0 - в игровом меню
-# 1 - игра начата
+# 1 - игра начата и на первом уровне
 # 2 - игра на паузе
 # 3 - игра выиграна
 # 4 - игра проиграна
+# 5 - игра на босс-уровне
 
 GLOBAL_STATE_MACHINE = 0
 all_sprites = pygame.sprite.Group()
@@ -78,7 +79,7 @@ if __name__ == '__main__':
         background_mask = BackgroundMask(all_sprites, background_sprites)
         player_mask = Mask(background_mask, all_sprites)
         vaccine = Vaccine(viruses_count, all_sprites)
-        player = Player(GLOBAL_STATE_MACHINE, player_mask, all_sprites)
+        player = Player(player_mask, all_sprites)
         new_virus(vaccine, fon_number, player_mask, background_mask)
         MYEVENTTYPE = pygame.USEREVENT + 1
         pygame.time.set_timer(MYEVENTTYPE, 1000)
@@ -87,7 +88,6 @@ if __name__ == '__main__':
         running = True
 
         while running:
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -152,6 +152,7 @@ if __name__ == '__main__':
 
             if sum(virus_amount_of_enemies) == 0:
                 GLOBAL_STATE_MACHINE = 3
+
             keys = pygame.key.get_pressed()
             all_sprites.update(keys)
             screen.blit(fon_map, (0, 0))
@@ -160,10 +161,16 @@ if __name__ == '__main__':
 
             if GLOBAL_STATE_MACHINE == 3:
                 running = False
-                end_menu = print_end_menu(1)
+                end_menu = print_end_menu(1, timer.count, player_mask.healthy, vaccine.kills)
+                timer.kill()
+                vaccine.kill()
+                health.kill()
             if GLOBAL_STATE_MACHINE == 4:
                 running = False
-                end_menu = print_end_menu(0)
+                end_menu = print_end_menu(0, timer.count, player_mask.healthy, vaccine.kills)
+                timer.kill()
+                vaccine.kill()
+                health.kill()
 
 
 
