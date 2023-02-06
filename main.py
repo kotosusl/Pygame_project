@@ -10,6 +10,7 @@ from Options import Timer, Health, Vaccine
 from random import randint
 from StartMenu import print_menu
 from EndMenu import print_end_menu
+from Cut_scene import play_cut_scene
 
 # 0 - в игровом меню
 # 1 - игра начата и на первом уровне
@@ -85,7 +86,17 @@ if __name__ == '__main__':
         pygame.time.set_timer(MYEVENTTYPE, 1000)
         timer = Timer(all_sprites)
         health = Health(player_mask, all_sprites)
-        running = True
+
+        if cut_scene:
+            pygame.mixer.music.pause()
+            print_cut_scene = play_cut_scene()
+            pygame.mixer.music.unpause()
+            if print_cut_scene:
+                running = True
+            else:
+                running = False
+        else:
+            running = True
 
         while running:
             for event in pygame.event.get():

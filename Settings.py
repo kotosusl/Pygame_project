@@ -16,9 +16,9 @@ class SettingsWindow(pygame.sprite.Sprite):
         SettingsWindow.CUT_SCENE = cut_scene
         self.image = SettingsWindow.image.copy()
         self.rect = self.image.get_rect()
-        Buttons('up', 500, 525, buttons_sprites_settings)
-        Buttons('down', 500, 575, buttons_sprites_settings)
-        Buttons('cut-scene', 500, 325, buttons_sprites_settings)
+        Buttons(cut_scene, 'up', 500, 525, buttons_sprites_settings)
+        Buttons(cut_scene, 'down', 500, 575, buttons_sprites_settings)
+        Buttons(cut_scene, 'cut-scene', 500, 325, buttons_sprites_settings)
         self.font = pygame.font.SysFont('sans serif', 50)
 
     def update(self, *args) -> None:
@@ -37,14 +37,17 @@ class Buttons(pygame.sprite.Sprite):
               load_image('button_cut_scene_true.png', -1),
               load_image('button_cut_scene_false.png', -1)]
 
-    def __init__(self, btn_type, x, y, *group):
+    def __init__(self, cut_scene, btn_type, x, y, *group):
         super(Buttons, self).__init__(*group)
         if btn_type == 'up':
             self.image = Buttons.images[0]
         elif btn_type == 'down':
             self.image = Buttons.images[2]
         else:
-            self.image = Buttons.images[4]
+            if cut_scene:
+                self.image = Buttons.images[4]
+            else:
+                self.image = Buttons.images[5]
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
