@@ -3,9 +3,9 @@ from load_image import load_image
 from befor_init import size, screen
 from Rating import RatingWindow
 from Instruction import InstructionWindow
-from ButtonClose import ButtonClose
+from Buttons import ButtonClose
 from Settings import SettingsWindow, buttons_sprites_settings
-from ButtonStart import ButtonStart
+from Buttons import ButtonStart
 
 # 0 - в ожидании ответа пользователя
 # 1 - запуск игры

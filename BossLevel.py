@@ -2,8 +2,8 @@ import pygame
 from load_image import load_image
 from befor_init import screen
 from player_for_boss_level import Player
-from ButtonInMenu import ButtonInMenu
-from ButtonStart import ButtonStart
+from Buttons import ButtonInMenu
+from Buttons import ButtonStart
 from Infected import Infected
 from random import randint
 from Options import Health, Vaccine

@@ -2,8 +2,7 @@ import pygame
 from load_image import load_image
 from befor_init import screen
 import datetime
-from Virus import KILLS_COUNT
-from ButtonInMenu import ButtonInMenu
+from Buttons import ButtonInMenu
 import csv
 
 # 0 - в ожидании ответа

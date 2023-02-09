@@ -45,7 +45,3 @@ class Infected(pygame.sprite.Sprite):
                 self.x += math.sin(math.radians((self.route + 90) % 360)) * self.speed
                 self.y -= math.cos(math.radians((self.route + 90) % 360)) * self.speed
                 self.state = 1
-
-        '''if self.state == 1 and (self.x > 1050 or self.x < -50):
-            self.kill()
-'''
