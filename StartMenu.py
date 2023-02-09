@@ -5,6 +5,7 @@ from Rating import RatingWindow
 from Instruction import InstructionWindow
 from ButtonClose import ButtonClose
 from Settings import SettingsWindow, buttons_sprites_settings
+from ButtonStart import ButtonStart
 
 # 0 - в ожидании ответа пользователя
 # 1 - запуск игры
@@ -17,28 +18,6 @@ buttons_sprites = pygame.sprite.Group()
 menu_sprite = pygame.sprite.Group()
 windows_sprites = pygame.sprite.Group()
 close_button_sprites = pygame.sprite.Group()
-
-
-class ButtonStart(pygame.sprite.Sprite):
-    images = [load_image('button_start.png', -1),
-              load_image('button_start_dark.png', -1)]
-
-    def __init__(self, *group):
-        super().__init__(*group)
-        self.image = ButtonStart.images[0]
-        self.rect = self.image.get_rect()
-        self.rect.x = size[0] // 2 - self.rect.w // 2
-        self.rect.y = 400
-
-    def update(self, *args) -> None:
-        if self.rect.collidepoint(pygame.mouse.get_pos()):
-            self.image = ButtonStart.images[1]
-            if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-                global START_STATE_MACHINE
-                if START_STATE_MACHINE == 0:
-                    START_STATE_MACHINE = 1
-        else:
-            self.image = ButtonStart.images[0]
 
 
 class ButtonExit(pygame.sprite.Sprite):
@@ -138,7 +117,7 @@ class StartMenu(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = 0
-        ButtonStart(buttons_sprites)
+        self.button_start = ButtonStart(size[0] // 2, 400, buttons_sprites)
         ButtonSettings(buttons_sprites)
         ButtonExit(buttons_sprites)
         ButtonRating(buttons_sprites)
@@ -146,6 +125,11 @@ class StartMenu(pygame.sprite.Sprite):
 
     def update(self) -> None:
         buttons_sprites.draw(self.image)
+        if self.button_start.state == 1:
+            global START_STATE_MACHINE
+            START_STATE_MACHINE = 1
+            self.button_start.state = 0
+            self.button_start.kill()
 
 
 def print_menu(volume, cut_scene):

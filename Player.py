@@ -22,7 +22,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = self.player_mask.rect.center
         self.route = self.player_mask.route
         self.image = pygame.transform.rotate(Player.image, 360 - self.route)
-        #self.mask = pygame.mask.from_surface(self.image)
+        self.mask = pygame.mask.from_surface(self.image)
 
 
 

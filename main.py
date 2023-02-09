@@ -4,17 +4,17 @@ from load_image import load_image
 from Player import Player
 from Mask import Mask
 from BackgroundMask import BackgroundMask
-from Virus import Virus, virus_amount_of_enemies, new_init, KILLS_COUNT
+from Virus import Virus, virus_amount_of_enemies, new_init
 from Bullet import Bullet
 from Options import Timer, Health, Vaccine
 from random import randint
 from StartMenu import print_menu
 from EndMenu import print_end_menu
 from Cut_scene import play_cut_scene
+from BossLevel import boss_level
 
 # 0 - в игровом меню
 # 1 - игра начата и на первом уровне
-# 2 - игра на паузе
 # 3 - игра выиграна
 # 4 - игра проиграна
 # 5 - игра на босс-уровне
@@ -24,8 +24,6 @@ all_sprites = pygame.sprite.Group()
 background_sprites = pygame.sprite.Group()
 viruses_sprites = pygame.sprite.Group()
 bullets_sprites = pygame.sprite.Group()
-'''virus_amount_of_enemies = [randint(1, 2) for _ in range(9)]
-virus_amount_of_enemies[4] = 3'''
 viruses_count = sum(virus_amount_of_enemies)
 virus_enemy_type = [randint(0, 2) for _ in range(9)]
 
@@ -103,9 +101,8 @@ if __name__ == '__main__':
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    GLOBAL_STATE_MACHINE = 6
                     if event.button == 1:
-                        Bullet(player_mask, player, bullets_sprites, all_sprites)
+                        Bullet(0, player_mask, bullets_sprites, all_sprites)
                         sound_shooting.play()
                 if event.type == MYEVENTTYPE:
                     timer.up()
@@ -127,6 +124,8 @@ if __name__ == '__main__':
                     player_mask.x = 25
                     background_mask.change_costume(fon_number)
                     new_virus(vaccine, fon_number, player_mask, background_mask)
+                    for bullet in bullets_sprites:
+                        bullet.kill()
             else:
                 if player_mask.x > size[0] - player_mask.rect[2]:
                     player_mask.x = size[0] - player_mask.rect[2]
@@ -137,6 +136,8 @@ if __name__ == '__main__':
                     player_mask.x = size[0] - 25
                     background_mask.change_costume(fon_number)
                     new_virus(vaccine, fon_number, player_mask, background_mask)
+                    for bullet in bullets_sprites:
+                        bullet.kill()
             else:
                 if player_mask.x < 0:
                     player_mask.x = 0
@@ -147,6 +148,8 @@ if __name__ == '__main__':
                     player_mask.y = 25
                     background_mask.change_costume(fon_number)
                     new_virus(vaccine, fon_number, player_mask, background_mask)
+                    for bullet in bullets_sprites:
+                        bullet.kill()
             else:
                 if player_mask.y > size[1] - player_mask.rect[3]:
                     player_mask.y = size[1] - player_mask.rect[3]
@@ -157,18 +160,29 @@ if __name__ == '__main__':
                     player_mask.y = size[1] - 25
                     background_mask.change_costume(fon_number)
                     new_virus(vaccine, fon_number, player_mask, background_mask)
+                    for bullet in bullets_sprites:
+                        bullet.kill()
             else:
                 if player_mask.y < 0:
                     player_mask.y = 0
-
-            if sum(virus_amount_of_enemies) == 0:
-                GLOBAL_STATE_MACHINE = 3
 
             keys = pygame.key.get_pressed()
             all_sprites.update(keys)
             screen.blit(fon_map, (0, 0))
             all_sprites.draw(screen)
             pygame.display.flip()
+
+            if sum(virus_amount_of_enemies) == 0:
+                GLOBAL_STATE_MACHINE = 5
+
+            if GLOBAL_STATE_MACHINE == 5:
+                play_boss_level = boss_level(player_mask.healthy)
+                if play_boss_level == 'quit':
+                    running = False
+                elif play_boss_level is True:
+                    GLOBAL_STATE_MACHINE = 3
+                else:
+                    GLOBAL_STATE_MACHINE = 4
 
             if GLOBAL_STATE_MACHINE == 3:
                 running = False

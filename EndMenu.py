@@ -3,6 +3,7 @@ from load_image import load_image
 from befor_init import screen
 import datetime
 from Virus import KILLS_COUNT
+from ButtonInMenu import ButtonInMenu
 import csv
 
 # 0 - в ожидании ответа
@@ -10,27 +11,6 @@ import csv
 END_STATE_MACHINE = 0
 buttons_sprites = pygame.sprite.Group()
 menu_sprite = pygame.sprite.Group()
-
-
-class ButtonInMenu(pygame.sprite.Sprite):
-    images = [load_image('button_inmenu.png', -1),
-              load_image('button_inmenu_dark.png', -1)]
-
-    def __init__(self, *group):
-        super().__init__(*group)
-        self.image = ButtonInMenu.images[0]
-        self.rect = self.image.get_rect()
-        self.rect.x = 650
-        self.rect.y = 670
-
-    def update(self, *args) -> None:
-        if self.rect.collidepoint(pygame.mouse.get_pos()):
-            self.image = ButtonInMenu.images[1]
-            if args and args[0].type == pygame.MOUSEBUTTONDOWN and self.rect.collidepoint(args[0].pos):
-                global END_STATE_MACHINE
-                END_STATE_MACHINE = 1
-        else:
-            self.image = ButtonInMenu.images[0]
 
 
 class EndMenu(pygame.sprite.Sprite):
@@ -43,10 +23,15 @@ class EndMenu(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = 0
-        ButtonInMenu(buttons_sprites)
+        self.button = ButtonInMenu(650, 670, buttons_sprites)
 
     def update(self) -> None:
         buttons_sprites.draw(self.image)
+        if self.button.state == 1:
+            global END_STATE_MACHINE
+            END_STATE_MACHINE = 1
+            self.button.state = 0
+            self.button.kill()
 
 
 def print_end_menu(menu_type, timer, healthy, kills):

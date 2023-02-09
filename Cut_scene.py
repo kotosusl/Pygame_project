@@ -73,6 +73,7 @@ def play_cut_scene():
                 fon_image = pygame.transform.scale(load_image('cut_scene\\fon.png'), (1000, 800))
                 fon_image.blit(viruses, (300 - viruses.get_rect().w // 2, 405 - viruses.get_rect().h // 2))
             if event.type == end_cut_scene:
+                doctor.kill()
                 return True
         if move_doctor:
             if doctor.route != 180:
