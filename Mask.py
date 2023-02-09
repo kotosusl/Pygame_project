@@ -27,8 +27,8 @@ class Mask(pygame.sprite.Sprite):
             self.rect.y = self.y
             self.rect.x = self.x
             if self.iscollide():
-                self.x -= math.sin(math.radians(self.route)) * self.speed
-                self.y += math.cos(math.radians(self.route)) * self.speed
+                self.x -= (math.sin(math.radians(self.route)) * self.speed + 0.01)
+                self.y += (math.cos(math.radians(self.route)) * self.speed - 0.01)
                 self.rect.y = self.y
                 self.rect.x = self.x
             self.mask = pygame.mask.from_surface(pygame.transform.rotate(load_image('mask2.png'), 360 - self.route))
@@ -39,8 +39,8 @@ class Mask(pygame.sprite.Sprite):
             self.rect.y = self.y
             self.rect.x = self.x
             if self.iscollide():
-                self.x += math.sin(math.radians(self.route)) * self.speed / 2
-                self.y -= math.cos(math.radians(self.route)) * self.speed / 2
+                self.x += (math.sin(math.radians(self.route)) * self.speed / 2 - 0.01)
+                self.y -= (math.cos(math.radians(self.route)) * self.speed / 2 + 0.01)
                 self.rect.y = self.y
                 self.rect.x = self.x
             self.mask = pygame.mask.from_surface(pygame.transform.rotate(load_image('mask2.png'), 360 - self.route))
