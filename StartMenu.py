@@ -1,4 +1,5 @@
 import pygame
+from sys import exit
 from load_image import load_image
 from befor_init import size, screen
 from Rating import RatingWindow
