@@ -4,22 +4,22 @@ import csv
 
 
 class RatingWindow(pygame.sprite.Sprite):
-    image = load_image('rating_table.png', -1)
+    image = load_image('rating_table.png', -1)  # картинки спрайта
     row = load_image('rating_row.png')
 
-    def __init__(self, *group):
+    def __init__(self, *group):  # инициализация спрайта
         super().__init__(*group)
         self.image = RatingWindow.image.copy()
         self.rect = self.image.get_rect()
         self.rect.x = 10
         self.rect.y = 10
-        with open('rating.csv', encoding="utf8") as rating_file:
+        with open('rating.csv', encoding="utf8") as rating_file:  # сбор данных из файла рейтинга
             reader = csv.DictReader(rating_file, delimiter=';', quotechar='"')
             bests = sorted(reader, key=lambda x: int(x['viruses']), reverse=True)
             y = 150
             font1 = pygame.font.SysFont('sans serif', 42)
 
-            for num, row in enumerate(bests):
+            for num, row in enumerate(bests):  # построчный вывод данных из файла в таблицу рейтинга
                 image = RatingWindow.row.copy()
                 self.number = font1.render(str(num + 1), False, (3, 3, 3))
                 self.date = font1.render(row['date'], False, (3, 3, 3))

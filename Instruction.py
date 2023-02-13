@@ -3,9 +3,9 @@ import pygame
 
 
 class InstructionWindow(pygame.sprite.Sprite):
-    image = load_image('instruction_table.png', -1)
+    image = load_image('instruction_table.png', -1)  # картинка спрайта
 
-    def __init__(self, *group):
+    def __init__(self, *group):  # инициализация спрайта
         super(InstructionWindow, self).__init__(*group)
         self.image = InstructionWindow.image
         self.rect = self.image.get_rect()

@@ -3,9 +3,9 @@ from load_image import load_image
 
 
 class Player(pygame.sprite.Sprite):
-    image = load_image('player2.png', -1)
+    image = load_image('player2.png', -1)  # картинка спрайта
 
-    def __init__(self, player_mask, *group):
+    def __init__(self, player_mask, *group):  # инициализация спрайта
         super().__init__(*group)
         self.image = Player.image
         self.player_mask = player_mask
@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = self.player_mask.rect.center
         self.mask = pygame.mask.from_surface(self.image)
 
-    def update(self, *args) -> None:
+    def update(self, *args) -> None:  # обновление игрока первого уровня
         self.rect = self.image.get_rect()
         self.rect.x = self.player_mask.rect.x
         self.rect.y = self.player_mask.rect.y

@@ -1,6 +1,6 @@
 import pygame
-from random import randint
 
+# статические переменные
 size = width, height = 1000, 800
 screen = pygame.display.set_mode(size)
 spawn_enemies_x = [804, 160, 356, 826, 198, 724, 600, 180, 164, 780, 230, 678, 226, 716, 192, 750, 144, 566]

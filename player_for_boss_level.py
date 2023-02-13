@@ -4,9 +4,9 @@ from befor_init import size
 
 
 class Player(pygame.sprite.Sprite):
-    image = load_image('player2.png', -1)
+    image = load_image('player2.png', -1)  # картинка спрайта
 
-    def __init__(self, healthy, *group):
+    def __init__(self, healthy, *group):  # инициализация спрайта
         super().__init__(*group)
         self.image = Player.image
         self.healthy = healthy
@@ -16,15 +16,15 @@ class Player(pygame.sprite.Sprite):
         self.route = 0
         self.mask = pygame.mask.from_surface(self.image)
 
-    def update(self, args) -> None:
-        if args[pygame.K_a]:
-            self.route = (self.route - 0.5) % 360
+    def update(self, args) -> None:  # обновление игрока второго уровня
+        if args[pygame.K_a]:  # обработка нажатия клавиши "a"
+            self.route = (self.route - 0.5) % 360  # поворот картинки влево
             self.rect = self.image.get_rect(center=self.rect.center)
             self.image = pygame.transform.rotate(Player.image, 360 - self.route)
             self.mask = pygame.mask.from_surface(pygame.transform.rotate(Player.image, 360 - self.route))
 
-        elif args[pygame.K_d]:
-            self.route = (self.route + 0.5) % 360
+        elif args[pygame.K_d]:  # обработка нажатия клавиши "d"
+            self.route = (self.route + 0.5) % 360  # поворот картинки вправо
             self.rect = self.image.get_rect(center=self.rect.center)
             self.image = pygame.transform.rotate(Player.image, 360 - self.route)
             self.mask = pygame.mask.from_surface(pygame.transform.rotate(Player.image, 360 - self.route))
